@@ -10,4 +10,8 @@ To create the Lambda layer artifact run simply:
 
 It will create a pre-tested zip file. The zip file can easily integrated in IaC pipelines or for manual use.
 
-> The compilation process specifically targets decoders, meaning that HEIF files can be read and not written.
+**The default compilation specifically targets decoders**, meaning that HEIF files can be read but not written. If you want to use encoders (for writing HEIF files) you can enable HEVC or AV1 encoding:
+
+```
+./run.sh --with-hevc-encoder --with-av1-encoder
+```
