@@ -21,3 +21,5 @@ The default script is targeting the `x86_64` platform. To build for `arm64` run:
 ```
 ./run.sh --build-target-arm64
 ```
+
+When building for a platform other than your host's, make sure that your Docker installation supports [building multi-platform images](https://docs.docker.com/build/building/multi-platform/).

@@ -27,7 +27,7 @@ while test $# -gt 0; do
 done
 
 
-docker build . -t sharp-heif-lambda-layer \
+docker buildx build . -t sharp-heif-lambda-layer \
     --platform $DOCKER_PLATFORM \
     --build-arg="BUILD_HEVC_ENCODER=$HEVC_ENCODING" \
     --build-arg="BUILD_AV1_ENCODER=$AV1_ENCODING" \
