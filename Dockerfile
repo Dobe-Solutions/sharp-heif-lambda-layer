@@ -43,8 +43,9 @@ RUN curl -L https://github.com/libvips/libvips/archive/refs/tags/v${VIPS_VERSION
     cd build && meson compile && meson install
 
 # install sharp
+ARG BUILD_TARGET
 RUN mkdir -p ${PREFIX_PATH}/nodejs && mkdir -p ${PREFIX_PATH}/sharp-lib && \
-    npm install --prefix ${PREFIX_PATH}/nodejs node-addon-api node-gyp && npm --prefix ${PREFIX_PATH}/nodejs install --cpu=x64 --os=linux --foreground-scripts sharp@${SHARP_VERSION} && \
+    npm install --prefix ${PREFIX_PATH}/nodejs node-addon-api node-gyp && npm --prefix ${PREFIX_PATH}/nodejs install --cpu=${TARGET_ARM64} --os=linux --foreground-scripts sharp@${SHARP_VERSION} && \
     rm -rf ${PREFIX_PATH}/nodejs/node_modules/\@img && \
     ldd ${PREFIX_PATH}/nodejs/node_modules/sharp/src/build/Release/sharp-linux-x64.node | awk '{print $3}' | xargs -I {} cp {} ${PREFIX_PATH}/sharp-lib && \
     npm uninstall node-addon-api node-gyp

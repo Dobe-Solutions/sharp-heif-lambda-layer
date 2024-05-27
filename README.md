@@ -15,3 +15,9 @@ It will create a pre-tested zip file. The zip file can easily integrated in IaC 
 ```
 ./run.sh --with-hevc-encoder --with-av1-encoder
 ```
+
+The default script is targeting the `x86_64` platform. To build for `arm64` run:
+
+```
+./run.sh --build-target-arm64
+```
