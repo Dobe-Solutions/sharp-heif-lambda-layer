@@ -1,0 +1,93 @@
+name: Release new version
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/amd64,linux/arm64
+      - name: Build layer for amd64 only decoders
+        run: ./run.sh
+      - name: Build layer for amd64 with hevc encoder
+        run: ./run.sh --with-hevc-encoder
+      - name: Build layer for amd64 with hevc and av1 encoder
+        run: ./run.sh --with-hevc-encoder --with-av1-encoder
+      - name: Build layer for arm64 only decoders
+        run: ./run.sh --build-target-arm64
+      - name: Build layer for arm64 with hevc encoder
+        run: ./run.sh --build-target-arm64 --with-hevc-encoder
+      - name: Build layer for arm64 with hevc and av1 encoder
+        run: ./run.sh --build-target-arm64 --with-hevc-encoder --with-av1-encoder
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset x64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./sharp-heif-lambda-layer-${{ github.ref }}-x64.zip
+          asset_name: sharp-heif-lambda-layer-${{ github.ref }}-x64.zip
+          asset_content_type: application/zip
+      - name: Upload Release Asset x64 hevc
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./sharp-heif-lambda-layer-${{ github.ref }}-x64-hevc.zip
+          asset_name: sharp-heif-lambda-layer-${{ github.ref }}-x64-hevc.zip
+          asset_content_type: application/zip
+      - name: Upload Release Asset x64 hevc av1
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./sharp-heif-lambda-layer-${{ github.ref }}-x64-hevc-av1.zip
+          asset_name: sharp-heif-lambda-layer-${{ github.ref }}-x64-hevc-av1.zip
+          asset_content_type: application/zip
+      - name: Upload Release Asset arm64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./sharp-heif-lambda-layer-${{ github.ref }}-arm64.zip
+          asset_name: sharp-heif-lambda-layer-${{ github.ref }}-arm64.zip
+          asset_content_type: application/zip
+      - name: Upload Release Asset arm64 hevc
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./sharp-heif-lambda-layer-${{ github.ref }}-arm64-hevc.zip
+          asset_name: sharp-heif-lambda-layer-${{ github.ref }}-arm64-hevc.zip
+          asset_content_type: application/zip
+      - name: Upload Release Asset arm64 hevc av1
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./sharp-heif-lambda-layer-${{ github.ref }}-arm64-hevc-av1.zip
+          asset_name: sharp-heif-lambda-layer-${{ github.ref }}-arm64-hevc-av1.zip
+          asset_content_type: application/zip
