@@ -31,7 +31,7 @@ while test $# -gt 0; do
 done
 
 
-docker buildx build . -t sharp-heif-lambda-layer \
+docker buildx build . --load -t sharp-heif-lambda-layer \
     --platform $DOCKER_PLATFORM \
     --build-arg="SHARP_VERION=$SHARP_VERSION" \
     --build-arg="BUILD_HEVC_ENCODER=$HEVC_ENCODING" \
@@ -41,7 +41,5 @@ docker buildx build . -t sharp-heif-lambda-layer \
 CONTAINER=$(docker create sharp-heif-lambda-layer)
 
 docker cp $CONTAINER:/tmp/sharp-heif-lambda-layer.zip .
-
-
 
 mv sharp-heif-lambda-layer.zip sharp-heif-lambda-layer-v$SHARP_VERSION-$FILE_POSTFIX.zip

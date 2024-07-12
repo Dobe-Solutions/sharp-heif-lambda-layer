@@ -15,11 +15,11 @@ jobs:
         uses: docker/setup-buildx-action@v3
         with:
           platforms: linux/amd64,linux/arm64
-      - name: Build layer for amd64 only decoders
+      - name: Build layer for x64 only decoders
         run: ./run.sh
-      - name: Build layer for amd64 with hevc encoder
+      - name: Build layer for x64 with hevc encoder
         run: ./run.sh --with-hevc-encoder
-      - name: Build layer for amd64 with hevc and av1 encoder
+      - name: Build layer for x64 with hevc and av1 encoder
         run: ./run.sh --with-hevc-encoder --with-av1-encoder
       - name: Build layer for arm64 only decoders
         run: ./run.sh --build-target-arm64
