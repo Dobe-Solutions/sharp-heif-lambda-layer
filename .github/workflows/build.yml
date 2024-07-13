@@ -6,7 +6,7 @@ on:
       - 'v*'
 
 jobs:
-  build:
+  build-x64:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -14,19 +14,40 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
       - name: Build layer for x64 only decoders
         run: ./run.sh
       - name: Build layer for x64 with hevc encoder
         run: ./run.sh --with-hevc-encoder
       - name: Build layer for x64 with hevc and av1 encoder
         run: ./run.sh --with-hevc-encoder --with-av1-encoder
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sharp-heif-lambda-layer-x64
+          path: sharp-heif-lambda-layer-*
+  build-arm64:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/arm64
       - name: Build layer for arm64 only decoders
         run: ./run.sh --build-target-arm64
       - name: Build layer for arm64 with hevc encoder
         run: ./run.sh --build-target-arm64 --with-hevc-encoder
       - name: Build layer for arm64 with hevc and av1 encoder
         run: ./run.sh --build-target-arm64 --with-hevc-encoder --with-av1-encoder
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sharp-heif-lambda-layer-arm64
+          path: sharp-heif-lambda-layer-*
+  release:
+    runs-on: ubuntu-latest
+    needs: [build-x64, build-arm64]
+    steps:
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -37,6 +58,9 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
       - name: Upload Release Asset x64
         uses: actions/upload-release-asset@v1
         env:
