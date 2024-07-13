@@ -23,3 +23,5 @@ The default script is targeting the `x86_64` platform. To build for `arm64` run:
 ```
 
 When building for a platform other than your host's, make sure that your Docker installation supports [building multi-platform images](https://docs.docker.com/build/building/multi-platform/).
+
+Prebuilt binaries can be downloaded for `x86_64` but not for `arm64` (as long as Github Actions doesn't offer a proper ARM image).
