@@ -25,25 +25,25 @@ jobs:
         with:
           name: sharp-heif-lambda-layer-x64
           path: sharp-heif-lambda-layer-*
-  build-arm64:
-    runs-on: macos-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          platforms: linux/arm64
-      - name: Build layer for arm64 only decoders
-        run: ./run.sh --build-target-arm64
-      - name: Build layer for arm64 with hevc encoder
-        run: ./run.sh --build-target-arm64 --with-hevc-encoder
-      - name: Build layer for arm64 with hevc and av1 encoder
-        run: ./run.sh --build-target-arm64 --with-hevc-encoder --with-av1-encoder
-      - uses: actions/upload-artifact@v4
-        with:
-          name: sharp-heif-lambda-layer-arm64
-          path: sharp-heif-lambda-layer-*
+  # build-arm64:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v3
+  #       with:
+  #         platforms: linux/arm64
+  #     - name: Build layer for arm64 only decoders
+  #       run: ./run.sh --build-target-arm64
+  #     - name: Build layer for arm64 with hevc encoder
+  #       run: ./run.sh --build-target-arm64 --with-hevc-encoder
+  #     - name: Build layer for arm64 with hevc and av1 encoder
+  #       run: ./run.sh --build-target-arm64 --with-hevc-encoder --with-av1-encoder
+  #     - uses: actions/upload-artifact@v4
+  #       with:
+  #         name: sharp-heif-lambda-layer-arm64
+  #         path: sharp-heif-lambda-layer-*
   release:
     runs-on: ubuntu-latest
     needs: [build-x64]
