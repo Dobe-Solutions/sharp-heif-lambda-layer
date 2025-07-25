@@ -1,4 +1,4 @@
-FROM public.ecr.aws/sam/build-nodejs20.x:latest AS builder
+FROM public.ecr.aws/sam/build-nodejs22.x:latest AS builder
 
 RUN dnf update -y && dnf groupinstall -y "Development Tools" && dnf install -y \
     glib2-devel expat-devel libjpeg-turbo-devel libpng-devel giflib-devel libexif-devel librsvg2-devel libtiff-devel lcms2-devel meson cmake nasm
@@ -7,12 +7,12 @@ ENV PREFIX_PATH=/opt
 ENV PKG_CONFIG_PATH=${PREFIX_PATH}/lib/pkgconfig
 ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${PREFIX_PATH}/lib
 
-ENV LIBDE265_VERSION=1.0.15
-ENV X265_VERSION=3.6
+ENV LIBDE265_VERSION=1.0.16
+ENV X265_VERSION=4.1
 ENV LIBAOM_VERSION=3.9.1
-ENV LIBHEIF_VERSION=1.18.2
-ENV WEBP_VERSION=1.4.0
-ENV VIPS_VERSION=8.15.3
+ENV LIBHEIF_VERSION=1.20.1
+ENV WEBP_VERSION=1.6.0
+ENV VIPS_VERSION=8.17.1
 ARG SHARP_VERSION
 ENV SHARP_VERSION=${SHARP_VERSION}
 
@@ -51,7 +51,7 @@ RUN mkdir -p ${PREFIX_PATH}/nodejs && mkdir -p ${PREFIX_PATH}/sharp-lib && \
     ldd ${PREFIX_PATH}/nodejs/node_modules/sharp/src/build/Release/sharp-linux-x64.node | awk '{print $3}' | xargs -I {} cp {} ${PREFIX_PATH}/sharp-lib && \
     npm uninstall node-addon-api node-gyp
 
-FROM public.ecr.aws/sam/build-nodejs20.x:latest AS packager
+FROM public.ecr.aws/sam/build-nodejs22.x:latest AS packager
 
 ENV PREFIX_PATH=/opt
 
