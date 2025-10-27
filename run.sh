@@ -30,8 +30,9 @@ while test $# -gt 0; do
     esac
 done
 
+echo Building sharp-heif-lambda-layer with sharp version $SHARP_VERSION
 
-docker buildx build . --load -t sharp-heif-lambda-layer \
+docker buildx build --progress=plain . --load -t sharp-heif-lambda-layer \
     --platform $DOCKER_PLATFORM \
     --build-arg="SHARP_VERSION=$SHARP_VERSION" \
     --build-arg="BUILD_HEVC_ENCODER=$HEVC_ENCODING" \

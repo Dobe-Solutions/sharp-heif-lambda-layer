@@ -9,10 +9,10 @@ ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${PREFIX_PATH}/lib
 
 ENV LIBDE265_VERSION=1.0.16
 ENV X265_VERSION=4.1
-ENV LIBAOM_VERSION=3.9.1
-ENV LIBHEIF_VERSION=1.20.1
+ENV LIBAOM_VERSION=3.13.1
+ENV LIBHEIF_VERSION=1.20.2
 ENV WEBP_VERSION=1.6.0
-ENV VIPS_VERSION=8.17.1
+ENV VIPS_VERSION=8.17.2
 ARG SHARP_VERSION
 ENV SHARP_VERSION=${SHARP_VERSION}
 
@@ -47,7 +47,6 @@ RUN curl -L https://github.com/libvips/libvips/archive/refs/tags/v${VIPS_VERSION
 ARG BUILD_TARGET
 RUN mkdir -p ${PREFIX_PATH}/nodejs && mkdir -p ${PREFIX_PATH}/sharp-lib && \
     npm install --prefix ${PREFIX_PATH}/nodejs node-addon-api node-gyp && npm --prefix ${PREFIX_PATH}/nodejs install --cpu=${BUILD_TARGET} --os=linux --foreground-scripts sharp@${SHARP_VERSION} && \
-    rm -rf ${PREFIX_PATH}/nodejs/node_modules/\@img && \
     ldd ${PREFIX_PATH}/nodejs/node_modules/sharp/src/build/Release/sharp-linux-x64.node | awk '{print $3}' | xargs -I {} cp {} ${PREFIX_PATH}/sharp-lib && \
     npm uninstall node-addon-api node-gyp
 
